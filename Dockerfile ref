@@ -1,0 +1,22 @@
+FROM node
+
+WORKDIR /app
+
+# COPY package.json . 
+# we copy package.json in a separate copy , to make docker cahce this step and cach npm install, since we do not change dependedncies very often
+
+COPY package.json . 
+
+ARG NODE_ENV
+
+RUN if ["${NODE_ENV}" = "production"] ; \
+    then npm install --only=production;\
+    else npm install; \
+    fi
+# RUN npm install
+COPY . .
+ENV PORT=4000
+
+EXPOSE ${PORT} 
+# CMD ["npm","start"]
+CMD ["npm","run","start-dev"]
